@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #edede9;
+    }
+
+    .calculator {
+      background-color: #edede9;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .display {
+      width: 160px;
+      height: 40px;
+      text-align: right;
+      font-size: 1.5em;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-areas:
+        "seven eight nine clear"
+        "four five six add"
+        "one two three minus"
+        "dot zero equals multiply"
+        "square squareroot prev divide";
+      gap: 10px;
+    }
+
+    .buttons button {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 50%;
+      background-color: #e3d5ca;
+      color: white;
+      cursor: pointer;
+    }
+
+    .buttons button:hover {
+      background-color: #d5bdaf;
+    }
+
+    .buttons .equals {
+      background-color: #e5989b;
+      grid-area: equals;
+    }
+
+    .buttons .equals:hover {
+      background-color: #f4acb7;
+    }
+
+    .buttons .clear {
+      background-color: #e5989b;
+      grid-area: clear;
+    }
+
+    .buttons .clear:hover {
+      background-color: #f4acb7;
+    }
+
+    .buttons .prev {
+      background-color: #e5989b;
+      grid-area: prev;
+    }
+
+    .buttons .prev:hover {
+      background-color: #f4acb7;
+    }
+
+    .buttons .equals { grid-area: equals; }
+    .buttons .clear { grid-area: clear; }
+    .buttons .divide { grid-area: divide; }
+    .buttons .multiply { grid-area: multiply; }
+    .buttons .minus { grid-area: minus; }
+    .buttons .add { grid-area: add; }
+    .buttons .dot { grid-area: dot; }
+    .buttons .zero { grid-area: zero; }
+    .buttons .one { grid-area: one; }
+    .buttons .two { grid-area: two; }
+    .buttons .three { grid-area: three; }
+    .buttons .four { grid-area: four; }
+    .buttons .five { grid-area: five; }
+    .buttons .six { grid-area: six; }
+    .buttons .seven { grid-area: seven; }
+    .buttons .eight { grid-area: eight; }
+    .buttons .nine { grid-area: nine; }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" class="display" id="display" disabled />
+    <div class="buttons">
+      <button class="seven" onclick="appendNumber('7')">7</button>
+      <button class="eight" onclick="appendNumber('8')">8</button>
+      <button class="nine" onclick="appendNumber('9')">9</button>
+      <button class="divide" onclick="setOperator('/')">/</button>
+
+      <button class="four" onclick="appendNumber('4')">4</button>
+      <button class="five" onclick="appendNumber('5')">5</button>
+      <button class="six" onclick="appendNumber('6')">6</button>
+      <button class="multiply" onclick="setOperator('*')">*</button>
+
+      <button class="one" onclick="appendNumber('1')">1</button>
+      <button class="two" onclick="appendNumber('2')">2</button>
+      <button class="three" onclick="appendNumber('3')">3</button>
+      <button class="minus" onclick="setOperator('-')">-</button>
+
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button class="zero" onclick="appendNumber('0')">0</button>
+      <button class="dot" onclick="appendDecimal('.')">.</button>
+      <button class="equals" onclick="calculate()">=</button>
+      <button class="add" onclick="setOperator('+')">+</button>
+      <button class="prev" onclick="viewPrevious()">Pre</button>
+    </div>
+  </div>
+
+  <script>
+    let currentInput = '';
+    let operator = '';
+    let previousInput = '';
+    let previousResult = '';
+
+    function appendNumber(number) {
+      currentInput += number;
+      document.getElementById('display').value = currentInput;
+    }
+
+    function appendDecimal(dot) {
+      if (!currentInput.includes(dot)) {
+        currentInput += dot;
+        document.getElementById('display').value = currentInput;
+      }
+    }
+
+    function setOperator(op) {
+      if (currentInput === '') return;
+      operator = op;
+      previousInput = currentInput;
+      currentInput = '';
+    }
+
+    function calculate() {
+      let result;
+      if (operator === '+') {
+        result = parseFloat(previousInput) + parseFloat(currentInput);
+      } else if (operator === '-') {
+        result = parseFloat(previousInput) - parseFloat(currentInput);
+      } else if (operator === '*') {
+        result = parseFloat(previousInput) * parseFloat(currentInput);
+      } else if (operator === '/') {
+        result = parseFloat(previousInput) / parseFloat(currentInput);
+      }
+
+      // Fix the result to 4 decimal places
+      result = parseFloat(result.toFixed(4));
+
+      document.getElementById('display').value = result;
+      previousResult = result;
+      currentInput = result.toString();
+      operator = '';
+    }
+
+    function clearDisplay() {
+      currentInput = '';
+      previousInput = '';
+      operator = '';
+      document.getElementById('display').value = '';
+    }
+
+    function viewPrevious() {
+      if (previousResult !== '') {
+        document.getElementById('display').value = previousResult;
+        currentInput = previousResult.toString();
+      }
+    }
+  </script>
+</body>
+</html>
